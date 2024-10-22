@@ -27,9 +27,9 @@ const TimeCostCalculator = () => {
     const hours = parseFloat(dailyHours);
     const price = parseFloat(itemPrice);
 
-    if (!yearlyIncome) return "Please enter your yearly income";
-    if (!dailyHours) return "Please enter your daily working hours";
-    if (!itemPrice) return "Please enter the item price";
+    if (!yearlyIncome) return "Enter your annual net income";
+    if (!dailyHours) return "What are your daily work hours?";
+    if (!itemPrice) return "Enter the price as a whole number, without cents";
     
     if (isNaN(income) || income <= 0) return "Please enter a valid yearly income";
     if (isNaN(hours) || hours <= 0 || hours > 24) return "Please enter valid daily hours (between 0 and 24)";
@@ -85,17 +85,17 @@ const TimeCostCalculator = () => {
           Time is Money Calculator
         </CardTitle>
         <CardDescription>
-          Convert your purchases into working hours
+        Discover the time price tag of your purchases before you reach for your wallet
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <InputField
           id="yearly-income"
-          label="Yearly Net Income"
+          label="Annual Net Income"
           icon={<DollarSign className="w-4 h-4" />}
           value={yearlyIncome}
           onChange={handleIncomeChange}
-          placeholder="Enter your yearly income"
+          placeholder="Enter your annual net income"
         />
 
         <InputField
@@ -104,7 +104,7 @@ const TimeCostCalculator = () => {
           icon={<Clock className="w-4 h-4" />}
           value={dailyHours}
           onChange={(e) => setDailyHours(e.target.value)}
-          placeholder="Enter daily hours worked"
+          placeholder="What are your daily work hours?"
           type="number"
           min="0"
           max="24"
@@ -112,11 +112,11 @@ const TimeCostCalculator = () => {
 
         <InputField
           id="item-price"
-          label="Item/Service Price"
+          label="Product/Service Price"
           icon={<ShoppingCart className="w-4 h-4" />}
           value={itemPrice}
           onChange={(e) => setItemPrice(e.target.value)}
-          placeholder="Enter price"
+          placeholder="Enter the price as a whole number, without cents"
           type="number"
           min="0"
         />
@@ -129,7 +129,7 @@ const TimeCostCalculator = () => {
             className="bg-background border-primary"
           />
           <Label htmlFor="recurring" className="text-sm font-medium cursor-pointer">
-            Monthly Recurring Payment
+            Recurring Monthly Payment
           </Label>
         </div>
 
@@ -138,8 +138,8 @@ const TimeCostCalculator = () => {
           className="w-full"
           variant="default"
         >
-          <Calculator className="w-4 h-4 mr-2" />
-          Calculate Time Cost
+          <Clock className="w-4 h-4 mr-2" />
+          Show Me The Time Price Tag
         </Button>
 
         {error && (
@@ -151,24 +151,26 @@ const TimeCostCalculator = () => {
         {result && !error && (
           <Alert className="bg-primary/10 border-primary">
             <AlertDescription>
-              <div className="space-y-2">
-                <p className="text-sm font-medium">
-                  Your hourly earnings: {formatCurrency(result.hourlyRate)}/hour
-                </p>
-                {result.isRecurring ? (
-                  <>
-                    <p className="font-medium text-primary">This will cost you:</p>
-                    <p>Monthly: {result.monthlyHours} hours ({result.monthlyDays} working days)</p>
-                    <p>Yearly: {result.yearlyHours} hours ({result.yearlyDays} working days)</p>
-                  </>
-                ) : (
-                  <>
-                    <p className="font-medium text-primary">This will cost you:</p>
-                    <p>{result.hours} hours ({result.days} working days)</p>
-                  </>
-                )}
-              </div>
-            </AlertDescription>
+  <div className="space-y-2">
+    <p className="text-sm font-medium">
+      Your hourly earnings: {formatCurrency(result.hourlyRate)}/hour
+    </p>
+    
+    <p className="font-medium text-primary flex items-center">
+      The time price tag: <Clock className="w-4 h-4 ml-1" />
+    </p>
+
+    {result.isRecurring ? (
+      <>
+        <p>Monthly: {result.monthlyHours} hours on the job ({result.monthlyDays} shifts of {dailyHours} hours)</p>
+        <p>Yearly: {result.yearlyHours} hours on the job ({result.yearlyDays} shifts of {dailyHours} hours)</p>
+      </>
+    ) : (
+      <p>{result.hours} hours on the job ({result.days} shifts of {dailyHours} hours)</p>
+    )}
+  </div>
+</AlertDescription>
+
           </Alert>
         )}
       </CardContent>
