@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { DollarSign, Clock, ShoppingCart, Calculator, Hourglass } from 'lucide-react';
+import { DollarSign, Clock, ShoppingCart, Hourglass } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -89,6 +88,10 @@ const TimeCostCalculator = () => {
     }
   };
 
+  const handleCheckboxChange = (checked: boolean) => {
+    setIsRecurring(checked);
+  };
+
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="space-y-1">
@@ -137,7 +140,7 @@ const TimeCostCalculator = () => {
           <Checkbox 
             id="recurring" 
             checked={isRecurring} 
-            onCheckedChange={setIsRecurring}
+            onCheckedChange={handleCheckboxChange} // Updated to use the handler
             className="bg-background border-primary"
           />
           <Label htmlFor="recurring" className="text-sm font-medium cursor-pointer">
