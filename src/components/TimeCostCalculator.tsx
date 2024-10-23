@@ -97,7 +97,7 @@ const TimeCostCalculator = () => {
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl flex items-center gap-2">
           <Hourglass className="w-6 h-6 text-primary" />
-          Time is Money Calculator
+          Money is Time Calculator
         </CardTitle>
         <CardDescription>
           Discover the time price tag of your purchases before you reach for your wallet
