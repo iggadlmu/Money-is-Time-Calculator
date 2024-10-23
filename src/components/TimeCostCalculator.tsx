@@ -172,7 +172,7 @@ const TimeCostCalculator = () => {
                 </p>
                 
                 <p className="font-medium text-primary flex items-center">
-                Find Out How Much Time You’re Spending: <Clock className="w-4 h-4 ml-1" />
+                How much time you’re spending: <Clock className="w-4 h-4 ml-1" />
                 </p>
 
                 {result.isRecurring ? (
