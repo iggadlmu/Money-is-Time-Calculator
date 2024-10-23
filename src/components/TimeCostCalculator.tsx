@@ -75,7 +75,7 @@ const TimeCostCalculator = () => {
     const yearlyIncomeNum = parseFloat(yearlyIncome);
     const dailyHoursNum = parseFloat(dailyHours);
     const price = parseFloat(itemPrice);
-    const userAnnualHours = dailyHoursNum * 5 * 52;
+    const userAnnualHours = dailyHoursNum * 5 * 52; // Assuming 5 workdays a week
     const hourlyEarnings = yearlyIncomeNum / userAnnualHours;
 
     const workingHours = price / hourlyEarnings;
@@ -88,12 +88,12 @@ const TimeCostCalculator = () => {
       const yearlyTime = formatTime(yearlyWorkingHours);
 
       const monthlyShifts = monthlyWorkingHours < dailyHoursNum
-        ? "Less than 1 shift"
-        : `${(monthlyWorkingHours / dailyHoursNum).toFixed(1)} shifts`;
-      
+        ? `Less than 1 shift of ${dailyHoursNum} hours`
+        : `${(monthlyWorkingHours / dailyHoursNum).toFixed(1)} shifts of ${dailyHoursNum} hours`;
+
       const yearlyShifts = yearlyWorkingHours < dailyHoursNum
-        ? "Less than 1 shift"
-        : `${(yearlyWorkingHours / dailyHoursNum).toFixed(1)} shifts`;
+        ? `Less than 1 shift of ${dailyHoursNum} hours`
+        : `${(yearlyWorkingHours / dailyHoursNum).toFixed(1)} shifts of ${dailyHoursNum} hours and ${(yearlyWorkingHours % dailyHoursNum).toFixed(0)} minutes of overtime`;
 
       setResult({
         isRecurring: true,
@@ -110,18 +110,15 @@ const TimeCostCalculator = () => {
       if (workingHours < 1) {
         const minutes = (workingHours * 60).toFixed(0);
         workingTime = `${minutes} minutes`;
-        workingDays = "Less than 1 shift";
+        workingDays = `Less than 1 shift of ${dailyHoursNum} hours`;
       } else {
         const hours = Math.floor(workingHours);
         const minutes = Math.round((workingHours - hours) * 60);
-        if (minutes > 0) {
-          workingTime = `${hours} hour${hours > 1 ? 's' : ''} and ${minutes} minute${minutes > 1 ? 's' : ''}`;
-        } else {
-          workingTime = `${hours} hour${hours > 1 ? 's' : ''}`;
-        }
+        workingTime = `${hours} hour${hours > 1 ? 's' : ''} and ${minutes} minute${minutes > 1 ? 's' : ''}`;
+        
         workingDays = (workingHours / dailyHoursNum).toFixed(1);
         if (workingDays === "0.0") {
-          workingDays = "Less than 1 shift";
+          workingDays = `Less than 1 shift of ${dailyHoursNum} hours`;
         } else {
           workingDays = `${workingDays} shifts of ${dailyHoursNum} hours`;
         }
@@ -148,7 +145,7 @@ const TimeCostCalculator = () => {
           Money is Time Calculator
         </CardTitle>
         <CardDescription>
-        Uncover the true cost of products and services by translating their prices into the work effort they represent for you
+          Uncover the true cost of products and services by translating their prices into the work effort they represent for you
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -220,7 +217,7 @@ const TimeCostCalculator = () => {
                 </p>
                 
                 <p className="font-medium text-primary flex items-center">
-                How much time you’re investing: <Clock className="w-4 h-4 ml-1" />
+                  How much time you’re investing: <Clock className="w-4 h-4 ml-1" />
                 </p>
 
                 {result.isRecurring ? (
