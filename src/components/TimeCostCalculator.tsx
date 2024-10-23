@@ -100,7 +100,7 @@ const TimeCostCalculator = () => {
           Money is Time Calculator
         </CardTitle>
         <CardDescription>
-          Discover the time price tag of your purchases before you reach for your wallet
+        Uncover the true cost of products and services by translating their prices into the work effort they represent for you
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -131,7 +131,7 @@ const TimeCostCalculator = () => {
           icon={<ShoppingCart className="w-4 h-4" />}
           value={itemPrice}
           onChange={(e) => setItemPrice(e.target.value)}
-          placeholder="Enter the price as a whole number, without cents"
+          placeholder="Enter the price as a whole number"
           type="number"
           min="0"
         />
