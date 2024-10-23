@@ -145,7 +145,7 @@ const TimeCostCalculator = () => {
           Money is Time Calculator
         </CardTitle>
         <CardDescription>
-          Uncover the true cost of products and services by translating their prices into the work effort they represent for you
+          Uncover the true cost of products and services by translating their prices into the work effort they represent for you.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
