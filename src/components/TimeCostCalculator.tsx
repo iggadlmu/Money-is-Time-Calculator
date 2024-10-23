@@ -89,11 +89,22 @@ const TimeCostCalculator = () => {
         workingTime = `${minutes} minutes`;
         workingDays = "Less than 1 shift";
       } else {
-        // Show in hours and calculate shifts
-        workingTime = `${workingHours.toFixed(1)} hours`;
+        // Convert hours to hours + minutes
+        const hours = Math.floor(workingHours);
+        const minutes = Math.round((workingHours - hours) * 60);
+        if (minutes > 0) {
+          workingTime = `${hours} hour${hours > 1 ? 's' : ''} and ${minutes} minute${minutes > 1 ? 's' : ''}`;
+        } else {
+          workingTime = `${hours} hour${hours > 1 ? 's' : ''}`;
+        }
         workingDays = (workingHours / dailyHoursNum).toFixed(1);
+        if (workingDays === "0.0") {
+          workingDays = "Less than 1 shift";
+        } else {
+          workingDays = `${workingDays} shifts of ${dailyHoursNum} hours`;
+        }
       }
-      
+
       setResult({
         isRecurring: false,
         hours: workingTime,
@@ -155,7 +166,7 @@ const TimeCostCalculator = () => {
           <Checkbox 
             id="recurring" 
             checked={isRecurring} 
-            onCheckedChange={handleCheckboxChange} // Updated to use the handler
+            onCheckedChange={handleCheckboxChange}
             className="bg-background border-primary"
           />
           <Label htmlFor="recurring" className="text-sm font-medium cursor-pointer">
@@ -196,7 +207,7 @@ const TimeCostCalculator = () => {
                     <p>Yearly: {result.yearlyHours} hours on the job ({result.yearlyDays} shifts of {dailyHours} hours)</p>
                   </>
                 ) : (
-                  <p>{result.hours} on the job ({result.days} shifts of {dailyHours} hours)</p>
+                  <p>{result.hours} on the job ({result.days})</p>
                 )}
               </div>
             </AlertDescription>
