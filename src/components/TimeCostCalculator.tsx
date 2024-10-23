@@ -222,11 +222,11 @@ const TimeCostCalculator = () => {
 
                 {result.isRecurring ? (
                   <>
-                    <p>Monthly: {result.monthlyHours} on the job ({result.monthlyDays})</p>
-                    <p>Yearly: {result.yearlyHours} on the job ({result.yearlyDays})</p>
+                    <p>Monthly: {result.monthlyHours} on the job </p>
+                    <p>Yearly: {result.yearlyHours} on the job </p>
                   </>
                 ) : (
-                  <p>{result.hours} on the job ({result.days})</p>
+                  <p>{result.hours} on the job </p>
                 )}
               </div>
             </AlertDescription>
