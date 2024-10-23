@@ -17,6 +17,7 @@ interface CalculationResult {
   yearlyHours?: string;
   yearlyDays?: string;
   hours?: string;
+  minutes?: string;
   days?: string;
 }
 
@@ -25,8 +26,8 @@ const TimeCostCalculator = () => {
   const [dailyHours, setDailyHours] = useState('');
   const [itemPrice, setItemPrice] = useState('');
   const [isRecurring, setIsRecurring] = useState(false);
-  const [result, setResult] = useState<CalculationResult | null>(null); // Use CalculationResult type
-  const [error, setError] = useState<string | null>(null); // Specify error type
+  const [result, setResult] = useState<CalculationResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleIncomeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
@@ -40,7 +41,7 @@ const TimeCostCalculator = () => {
 
     if (!yearlyIncome) return "Enter your annual net income";
     if (!dailyHours) return "What are your daily work hours?";
-    if (!itemPrice) return "Enter the price as a whole number, without cents";
+    if (!itemPrice) return "Enter the price as a whole number";
     
     if (isNaN(income) || income <= 0) return "Please enter a valid yearly income";
     if (isNaN(hours) || hours <= 0 || hours > 24) return "Please enter valid daily hours (between 0 and 24)";
@@ -64,6 +65,8 @@ const TimeCostCalculator = () => {
     const userAnnualHours = dailyHoursNum * 5 * 52;
     const hourlyEarnings = yearlyIncomeNum / userAnnualHours;
 
+    const workingHours = price / hourlyEarnings;
+
     if (isRecurring) {
       const monthlyWorkingHours = price / hourlyEarnings;
       const yearlyWorkingHours = monthlyWorkingHours * 12;
@@ -77,12 +80,24 @@ const TimeCostCalculator = () => {
         hourlyRate: hourlyEarnings.toFixed(2)
       });
     } else {
-      const workingHours = price / hourlyEarnings;
+      let workingTime: string | undefined;
+      let workingDays: string | undefined;
+
+      if (workingHours < 1) {
+        // Convert to minutes
+        const minutes = (workingHours * 60).toFixed(0);
+        workingTime = `${minutes} minutes`;
+        workingDays = "Less than 1 shift";
+      } else {
+        // Show in hours and calculate shifts
+        workingTime = `${workingHours.toFixed(1)} hours`;
+        workingDays = (workingHours / dailyHoursNum).toFixed(1);
+      }
       
       setResult({
         isRecurring: false,
-        hours: workingHours.toFixed(1),
-        days: (workingHours / dailyHoursNum).toFixed(1),
+        hours: workingTime,
+        days: workingDays,
         hourlyRate: hourlyEarnings.toFixed(2)
       });
     }
@@ -172,7 +187,7 @@ const TimeCostCalculator = () => {
                 </p>
                 
                 <p className="font-medium text-primary flex items-center">
-                How much time you’re spending: <Clock className="w-4 h-4 ml-1" />
+                How much time you’re investing: <Clock className="w-4 h-4 ml-1" />
                 </p>
 
                 {result.isRecurring ? (
@@ -181,7 +196,7 @@ const TimeCostCalculator = () => {
                     <p>Yearly: {result.yearlyHours} hours on the job ({result.yearlyDays} shifts of {dailyHours} hours)</p>
                   </>
                 ) : (
-                  <p>{result.hours} hours on the job ({result.days} shifts of {dailyHours} hours)</p>
+                  <p>{result.hours} on the job ({result.days} shifts of {dailyHours} hours)</p>
                 )}
               </div>
             </AlertDescription>
