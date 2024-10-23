@@ -50,6 +50,19 @@ const TimeCostCalculator = () => {
     return null;
   };
 
+  const formatTime = (hours: number) => {
+    if (hours < 1) {
+      const minutes = Math.round(hours * 60);
+      return `${minutes} minute${minutes !== 1 ? 's' : ''}`;
+    } else {
+      const hrs = Math.floor(hours);
+      const minutes = Math.round((hours - hrs) * 60);
+      return minutes > 0
+        ? `${hrs} hour${hrs !== 1 ? 's' : ''} and ${minutes} minute${minutes !== 1 ? 's' : ''}`
+        : `${hrs} hour${hrs !== 1 ? 's' : ''}`;
+    }
+  };
+
   const calculateWorkingHours = () => {
     setError(null);
     const validationError = validateInputs();
@@ -71,12 +84,23 @@ const TimeCostCalculator = () => {
       const monthlyWorkingHours = price / hourlyEarnings;
       const yearlyWorkingHours = monthlyWorkingHours * 12;
       
+      const monthlyTime = formatTime(monthlyWorkingHours);
+      const yearlyTime = formatTime(yearlyWorkingHours);
+
+      const monthlyShifts = monthlyWorkingHours < dailyHoursNum
+        ? "Less than 1 shift"
+        : `${(monthlyWorkingHours / dailyHoursNum).toFixed(1)} shifts`;
+      
+      const yearlyShifts = yearlyWorkingHours < dailyHoursNum
+        ? "Less than 1 shift"
+        : `${(yearlyWorkingHours / dailyHoursNum).toFixed(1)} shifts`;
+
       setResult({
         isRecurring: true,
-        monthlyHours: monthlyWorkingHours.toFixed(1),
-        monthlyDays: (monthlyWorkingHours / dailyHoursNum).toFixed(1),
-        yearlyHours: yearlyWorkingHours.toFixed(1),
-        yearlyDays: (yearlyWorkingHours / dailyHoursNum).toFixed(1),
+        monthlyHours: monthlyTime,
+        monthlyDays: monthlyShifts,
+        yearlyHours: yearlyTime,
+        yearlyDays: yearlyShifts,
         hourlyRate: hourlyEarnings.toFixed(2)
       });
     } else {
@@ -84,12 +108,10 @@ const TimeCostCalculator = () => {
       let workingDays: string | undefined;
 
       if (workingHours < 1) {
-        // Convert to minutes
         const minutes = (workingHours * 60).toFixed(0);
         workingTime = `${minutes} minutes`;
         workingDays = "Less than 1 shift";
       } else {
-        // Convert hours to hours + minutes
         const hours = Math.floor(workingHours);
         const minutes = Math.round((workingHours - hours) * 60);
         if (minutes > 0) {
@@ -203,8 +225,8 @@ const TimeCostCalculator = () => {
 
                 {result.isRecurring ? (
                   <>
-                    <p>Monthly: {result.monthlyHours} hours on the job ({result.monthlyDays} shifts of {dailyHours} hours)</p>
-                    <p>Yearly: {result.yearlyHours} hours on the job ({result.yearlyDays} shifts of {dailyHours} hours)</p>
+                    <p>Monthly: {result.monthlyHours} on the job ({result.monthlyDays})</p>
+                    <p>Yearly: {result.yearlyHours} on the job ({result.yearlyDays})</p>
                   </>
                 ) : (
                   <p>{result.hours} on the job ({result.days})</p>
